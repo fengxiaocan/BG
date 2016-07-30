@@ -22,11 +22,13 @@ public class BGView
     private static final String TAG = "BGView";
     private Paint mPaintBlack;          //黑色画笔
     private Paint mPaintWhite;          //白色画笔
+    private Paint mPaintHollowBlack;    //黑色空心画笔
     private float mCx;                  //中心点x轴
     private float mCy;                  //中心点y轴
     private float mRadius;              //太极圆的半径
-    private float mTjDegress;             //太极圆旋转的角度
-    private float mBgDegress;             //八卦旋转的角度
+    private float m8GRadius;            //八卦外圆的半径
+    private float mTjDegress;           //太极圆旋转的角度
+    private float mBgDegress;           //八卦旋转的角度
     private float mRectWidth;           //八卦矩形的宽的一半
     private float mRectHeight;          //八卦矩形的高的一半
     private float mInsideDistance;      //里八卦矩形到太极圆的距离
@@ -53,6 +55,8 @@ public class BGView
         mInsideDistance = mRadius / 10;   //里八卦矩形到太极圆的距离
         mMiddleDistance = mInsideDistance * 2;   //中八卦矩形到太极圆的距离
         mOuterDistance = mInsideDistance * 3;   //外八卦矩形到太极圆的距离
+
+        m8GRadius = mRadius + mOuterDistance + mRectWidth / 2 ;
     }
 
     /**
@@ -66,6 +70,10 @@ public class BGView
         mPaintWhite = new Paint();
         mPaintWhite.setColor(Color.WHITE);
         mPaintWhite.setAntiAlias(true);//去锯齿
+        //初始化黑色空心画笔
+        mPaintHollowBlack = new Paint();
+        mPaintHollowBlack.setAntiAlias(true);//去锯齿
+        mPaintHollowBlack.setStyle(Paint.Style.STROKE);//空心画笔
     }
 
     public BGView(Context context, AttributeSet attrs) {
@@ -84,6 +92,15 @@ public class BGView
         //画太极
         drawTj(canvas);
         draw8G(canvas);
+        drawCircle(canvas);
+    }
+
+    /**
+     * 画八卦外圆1
+     * @param canvas 画布
+     */
+    private void drawCircle(Canvas canvas) {
+        canvas.drawCircle(mCx,mCy,m8GRadius,mPaintHollowBlack);
     }
 
     /**
@@ -101,49 +118,49 @@ public class BGView
         drawTwo(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //震雷
         drawOne(canvas, mInsideDistance);
         drawTwo(canvas, mMiddleDistance);
         drawTwo(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //火离
         drawOne(canvas, mInsideDistance);
         drawTwo(canvas, mMiddleDistance);
         drawOne(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //泽兑
         drawOne(canvas, mInsideDistance);
         drawOne(canvas, mMiddleDistance);
         drawTwo(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //天乾
         drawOne(canvas, mInsideDistance);
         drawOne(canvas, mMiddleDistance);
         drawOne(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //风巽
         drawTwo(canvas, mInsideDistance);
         drawOne(canvas, mMiddleDistance);
         drawOne(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //水坎
         drawTwo(canvas, mInsideDistance);
         drawOne(canvas, mMiddleDistance);
         drawTwo(canvas, mOuterDistance);
 
         //旋转画布
-        canvas.rotate(45 + mBgDegress, mCx, mCy);
+        canvas.rotate(45, mCx, mCy);
         //山艮
         drawTwo(canvas, mInsideDistance);
         drawTwo(canvas, mMiddleDistance);
@@ -240,7 +257,7 @@ public class BGView
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         //旋转八卦
-        rotateView();
+//        rotateView();
     }
 
     /**
