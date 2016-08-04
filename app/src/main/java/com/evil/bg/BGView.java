@@ -196,13 +196,13 @@ public class BGView
      */
     private void initData() {
         mRadius = 100;    //太极的半径
-        mTjDegress = 0;    //太极旋转的角度
-        mBgDegress = 0;    //八卦旋转的角度
-        mBg2Degress = 0;    //八卦2旋转的角度
-        mDoorDegress = 0;    //门旋转的角度
-        mTGDegress = 0;    //门旋转的角度
-        mDZDegress = 0;    //门旋转的角度
-        mJQDegress = 0;    //门旋转的角度
+        mTjDegress = 0;   //太极旋转的角度
+        mBgDegress = 0;   //八卦旋转的角度
+        mBg2Degress = 0;  //八卦2旋转的角度
+        mDoorDegress = 0; //门旋转的角度
+        mTGDegress = 0;   //门旋转的角度
+        mDZDegress = 0;   //门旋转的角度
+        mJQDegress = 0;   //门旋转的角度
         mDirectionDegress = 0;//方位旋转的角度
         mDirectionFixDegress = 361;//方位固定的旋转的角度
 
