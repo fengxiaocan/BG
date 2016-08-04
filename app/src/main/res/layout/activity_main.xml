@@ -5,11 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.evil.bg.MainActivity">
+    <!--现在的日期-->
+    <TextView
+        android:gravity="center"
+        android:id="@+id/tv_now_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="17sp"/>
+    <!--农历日期-->
+    <TextView
+        android:gravity="center"
+        android:id="@+id/tv_old_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_now_date"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textSize="17sp"/>
 
     <com.evil.bg.BGView
-        android:layout_centerInParent="true"
+        android:id="@+id/bgview"
         android:layout_width="match_parent"
-        android:background="#33000000"
         android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="#33000000"
         />
+
+    <Button
+        android:id="@+id/bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="暂停"/>
 </RelativeLayout>
