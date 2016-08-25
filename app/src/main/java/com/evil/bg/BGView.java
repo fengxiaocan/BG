@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.WindowManager;
 
 /*
  *  @项目名：  BG 
@@ -181,12 +182,15 @@ public class BGView
 
     public BGView(Context context) {
         this(context, null);
-        initPaint();
-        initData();
     }
 
     public BGView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        //动态设置太极半径
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        mRadius = wm.getDefaultDisplay().getWidth() / 10;    //太极的半径
+
         initPaint();
         initData();
     }
@@ -195,7 +199,6 @@ public class BGView
      * 初始化数据
      */
     private void initData() {
-        mRadius = 100;    //太极的半径
         mTjDegress = 0;   //太极旋转的角度
         mBgDegress = 0;   //八卦旋转的角度
         mBg2Degress = 0;  //八卦2旋转的角度
@@ -213,7 +216,7 @@ public class BGView
         m8GRadius1 = mRadius + mRectWidth / 2 + mFont / 2;//八卦外的圆1半径
         m8GRadius2 = m8GRadius1 + mRectWidth / 2 + mFont / 2;//八卦外的圆2半径
 
-        mInsideDistance = m8GRadius2 + mFont;                   //里爻到太极圆心的距离
+        mInsideDistance = m8GRadius2 + mFont/2;                   //里爻到太极圆心的距离
         mMiddleDistance = mInsideDistance + mRectHeight + 3;    //中爻到太极圆心的距离
         mOuterDistance = mMiddleDistance + mRectHeight + 3;     //外爻到太极圆心的距离
 
@@ -221,13 +224,13 @@ public class BGView
         mMiddleDistance = mInsideDistance + mRectHeight + 3;    //中爻到太极圆心的距离
         mOuterDistance = mMiddleDistance + mRectHeight + 3;     //外爻到太极圆心的距离
 
-        m8GRadius3 = m8GRadius2 + mRectWidth + mFont / 3;//八卦外的圆3半径
-        m8GRadius4 = m8GRadius3 + mRectWidth + mFont / 3;//八卦外的圆4半径
-        m8GRadius5 = m8GRadius4 + mRectWidth / 2 + mFont / 2;//八卦外的圆5半径
-        m8GRadius6 = m8GRadius5 + mRectWidth / 2 + mFont / 2;//八卦外的圆6半径
-        m8GRadius7 = m8GRadius6 + mRectWidth / 2 + mFont / 2;//八卦外的圆7半径
-        m8GRadius8 = m8GRadius7 + mRectWidth / 2 + mFont / 2;//八卦外的圆8半径
-        m8GRadius9 = m8GRadius8 + mRectWidth / 2 + mFont / 2;//八卦外的圆9半径
+        m8GRadius3 = m8GRadius2 + mRectWidth + mFont / 5;//八卦外的圆3半径
+        m8GRadius4 = m8GRadius3 + mRectWidth + mFont / 5;//八卦外的圆4半径
+        m8GRadius5 = m8GRadius4 + mRectWidth / 2 + mFont / 4;//八卦外的圆5半径
+        m8GRadius6 = m8GRadius5 + mRectWidth / 2 + mFont / 4;//八卦外的圆6半径
+        m8GRadius7 = m8GRadius6 + mRectWidth / 2 + mFont / 4;//八卦外的圆7半径
+        m8GRadius8 = m8GRadius7 + mRectWidth / 2 + mFont / 4;//八卦外的圆8半径
+        m8GRadius9 = m8GRadius8 + mRectWidth / 2 + mFont / 4;//八卦外的圆9半径
     }
 
     /**
@@ -251,7 +254,8 @@ public class BGView
         mPaintHollowBlack.setAntiAlias(true);//去锯齿
         mPaintHollowBlack.setStyle(Paint.Style.STROKE);//空心画笔
         //初始化字体画笔
-        mFont = 30;        //字体大小
+//        mFont = getResources().getDimension(R.dimen.bg_view_font_size);        //字体大小
+        mFont = mRadius/3;        //字体大小
         mPaintFont = new Paint();
         mPaintFont.setAntiAlias(true);//去锯齿
         mPaintFont.setTextAlign(Paint.Align.CENTER);//设置字体居中
@@ -261,7 +265,8 @@ public class BGView
         mPaintRedFont.setColor(Color.RED);
         mPaintRedFont.setAntiAlias(true);//去锯齿
         mPaintRedFont.setTextAlign(Paint.Align.CENTER);//设置字体居中
-        mPaintRedFont.setTextSize(15);
+//        mPaintRedFont.setTextSize(getResources().getDimension(R.dimen.bg_view_red_font_size));
+        mPaintRedFont.setTextSize(mRadius/4);//设置字体大小
     }
 
     @Override
