@@ -2,6 +2,7 @@ package com.evil.bg;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,15 +14,22 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 public class MainActivity
         extends AppCompatActivity
+        implements View.OnClickListener
 {
 
     private BGView          mBgView;
@@ -32,7 +40,12 @@ public class MainActivity
     private String          mLocationProvider;// 位置提供者名称，GPS设备还是网络
     private float           mTargetDirection;// 目标浮点方向
     private TextView        mTvNowDate;
-    private TextView mTvOldDate;
+    private TextView        mTvOldDate;
+    private Button          select;
+    private EditText        year;
+    private EditText        month;
+    private EditText        day;
+    private Random mRandom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +56,18 @@ public class MainActivity
         //初始化控件
         initView();
         initData();
-
+        mRandom = new Random();
         mBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean state = mBgView.getRotateState();
-                if (state) {
-                    mBgView.stopRotate();
-                    mBt.setText("开始");
-                } else {
-                    mBgView.startRotate();
-                    mBt.setText("暂停");
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SystemClock.sleep(3000);
+                        int i = mRandom.nextInt(10);
+
+                    }
+                }).start();
             }
         });
     }
@@ -65,10 +78,10 @@ public class MainActivity
     private void initData() {
         String time = TimeUtils.formatTime(System.currentTimeMillis(), TimeUtils.DATE_TYPE6);
         mTvNowDate.setText(time);
-        int nowYear = TimeUtils.getNowYear();
-        int nowMonth = TimeUtils.getNowMonth();
-        int nowDate = TimeUtils.getNowDate();
-        String lunar = Lauar.getLunar(nowYear + "", nowMonth + "", nowDate + "");
+        int    nowYear  = TimeUtils.getNowYear();
+        int    nowMonth = TimeUtils.getNowMonth();
+        int    nowDate  = TimeUtils.getNowDate();
+        String lunar    = Lauar.getLunar(nowYear + "", nowMonth + "", nowDate + "");
         mTvOldDate.setText(lunar);
     }
 
@@ -80,6 +93,8 @@ public class MainActivity
         mBt = (Button) findViewById(R.id.bt);
         mTvNowDate = (TextView) findViewById(R.id.tv_now_date);
         mTvOldDate = (TextView) findViewById(R.id.tv_old_date);
+        select = (Button) findViewById(R.id.select);
+        select.setOnClickListener(this);
     }
 
     /**
@@ -189,14 +204,17 @@ public class MainActivity
                      .show();
             }
         }
+
         //  Provider被enable时触发此函数，比如GPS被打开
         @Override
         public void onProviderEnabled(String provider) {
         }
+
         // Provider被disable时触发此函数，比如GPS被关闭
         @Override
         public void onProviderDisabled(String provider) {
         }
+
         //当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
         @Override
         public void onLocationChanged(Location location) {
@@ -204,4 +222,75 @@ public class MainActivity
         }
     };
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.select:
+                //选择生日
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                View inflate = View.inflate(this, R.layout.time_layout, null);
+                builder.setView(inflate);
+
+                year = (EditText) inflate.findViewById(R.id.year);
+                month = (EditText) inflate.findViewById(R.id.month);
+                day = (EditText) inflate.findViewById(R.id.day);
+
+                builder.setTitle("请设置生日");
+                builder.setNeutralButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String submit = submit();
+                        Toast.makeText(MainActivity.this, submit, Toast.LENGTH_SHORT)
+                             .show();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.show();
+                break;
+        }
+    }
+
+    private String submit() {
+        // validate
+        String yearString = year.getText()
+                                .toString()
+                                .trim();
+        if (TextUtils.isEmpty(yearString)) {
+            Toast.makeText(this, "请输入年份", Toast.LENGTH_SHORT)
+                 .show();
+            return yearString;
+        }
+
+        String monthString = month.getText()
+                                  .toString()
+                                  .trim();
+        if (TextUtils.isEmpty(monthString)) {
+            Toast.makeText(this, "请输入月份", Toast.LENGTH_SHORT)
+                 .show();
+            return yearString;
+        }
+
+        String dayString = day.getText()
+                              .toString()
+                              .trim();
+        if (TextUtils.isEmpty(dayString)) {
+            Toast.makeText(this, "请输入日", Toast.LENGTH_SHORT)
+                 .show();
+            return yearString;
+        }
+
+        // TODO validate success, do something
+        if (Integer.valueOf(monthString) < 1 || Integer.valueOf(monthString) > 12){
+            Toast.makeText(MainActivity.this, "月份不合法", Toast.LENGTH_SHORT)
+                 .show();
+            return yearString;
+        }
+        if (Integer.valueOf(dayString) < 1 || Integer.valueOf(dayString) > 31){
+            Toast.makeText(MainActivity.this, "日期不合法", Toast.LENGTH_SHORT)
+                 .show();
+            return yearString;
+        }
+
+        return yearString + monthString + dayString;
+    }
 }

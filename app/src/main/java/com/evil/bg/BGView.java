@@ -736,4 +736,5 @@ public class BGView
     public void setDirectionFix(float fix) {
         mDirectionFixDegress = fix;
     }
+
 }
